@@ -1,0 +1,37 @@
+name: Test
+
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get install nkf
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+          cache-dependency-path: go.sum
+
+      - name: Install dependencies
+        run: make setup
+
+      - name: Run build
+        run: make build
+
+      - name: Run test
+        run: make test
+
+      - name: Run lint
+        run: make lint
+
+      - name: Check format
+        run: make fmt && git diff --exit-code
+
+      - name: Check character code and newline code
+        run: git ls-files | xargs -n 10 nkf --guess | ( ! grep -e Shift_JIS -e CRLF -e BOM )
