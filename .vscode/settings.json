@@ -2,5 +2,9 @@
   "editor.defaultFormatter": null,
   "editor.formatOnSave": false,
   "editor.renderControlCharacters": true,
-  "files.trimFinalNewlines": true
+  "files.trimFinalNewlines": true,
+  "[go]": {
+    "editor.defaultFormatter": "golang.go",
+    "editor.formatOnSave": true
+  }
 }
