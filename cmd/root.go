@@ -1,19 +1,38 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
+	"strings"
 
+	"github.com/google/go-github/v64/github"
 	"github.com/spf13/cobra"
 )
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "github-card",
+	Use:   "github-card <owner>/<repo>",
 	Short: "GitHub Repository Card Generator",
+	Args:  cobra.ExactArgs(1),
 	RunE:  run,
 }
 
 func run(cmd *cobra.Command, args []string) error {
+	ctx := cmd.Context()
+
+	if len(strings.Split(args[0], "/")) != 2 {
+		return fmt.Errorf("invalid repository name: %s", args[0])
+	}
+	owner := strings.Split(args[0], "/")[0]
+	repo := strings.Split(args[0], "/")[1]
+
+	client := github.NewClient(nil)
+	repository, _, err := client.Repositories.Get(ctx, owner, repo)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("repository: %v\n", repository)
+
 	return nil
 }
 
