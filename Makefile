@@ -35,6 +35,11 @@ lint: ## Run all linters.
 fix: ## Fix all linter errors.
 	go-errorlint -errorf=true -fix ./...
 
+.PHONY: codegen
+codegen: ## Generate code.
+	go run ./tools/generate-github-colors/...
+	$(MAKE) fmt
+
 .PHONY: help
 help: ## Show this help message.
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
