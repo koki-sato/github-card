@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/google/go-github/v64/github"
@@ -43,13 +45,32 @@ func run(cmd *cobra.Command, args []string) error {
 
 	// Get GitHub repository information.
 	client := github.NewClient(nil)
+	if os.Getenv("GITHUB_TOKEN") != "" {
+		client = github.NewClient(nil).WithAuthToken(os.Getenv("GITHUB_TOKEN"))
+	}
 	repository, _, err := client.Repositories.Get(ctx, owner, repo)
 	if err != nil {
 		return err
 	}
 
+	// Get the number of commits.
+	// See https://stackoverflow.com/questions/27931139/how-to-use-github-v3-api-to-get-commit-count-for-a-repo/70610670#70610670
+	_, resp, err := client.Repositories.ListCommits(ctx, owner, repo, &github.CommitsListOptions{ListOptions: github.ListOptions{PerPage: 1, Page: 1}})
+	if err != nil {
+		return err
+	}
+	re := regexp.MustCompile(`<https://api.github.com/repositories/\d+/commits\?page=(\d+)&per_page=\d+>; rel="last"`)
+	matches := re.FindStringSubmatch(resp.Header["Link"][0])
+	if len(matches) != 2 {
+		return fmt.Errorf("unable to find the number of commits")
+	}
+	nCommits, err := strconv.Atoi(matches[1])
+	if err != nil {
+		return err
+	}
+
 	// Generate a SVG from the repository information.
-	svg := card.GenerateSVG(repository, card.Option{})
+	svg := card.GenerateSVG(repository, nCommits, card.Option{})
 
 	// Write the SVG to the output file.
 	outFile := flag.output
