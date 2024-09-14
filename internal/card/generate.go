@@ -45,10 +45,10 @@ func GenerateSVG(repository *github.Repository, nCommits int, option Option) str
 	<defs />
 	<g fill="none" stroke="black" stroke-width="1" fill-rule="evenodd" stroke-linecap="square" stroke-linejoin="bevel">
 		<g fill="#ffffff" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)">
-			<rect x="0" y="0" width="440" height="%d"/>
+			<rect x="0" y="0" width="%d" height="%d"/>
 		</g>
 		<!-- Boarder -->
-		<rect x="0" y="0" width="441" height="%d" stroke="#eaecef" stroke-width="2"/>
+		<rect x="0" y="0" width="%d" height="%d" stroke="#eaecef" stroke-width="2"/>
 		<!-- Repo name -->
 		<g fill="#0366d6" fill-opacity="1" stroke="#0366d6" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)">
 			<a href="%s" target="_blank" rel="noopener noreferrer">
@@ -77,7 +77,7 @@ func GenerateSVG(repository *github.Repository, nCommits int, option Option) str
 	</g>
 </svg>
 `,
-		width, height+1, height+1, height, repository.GetHTMLURL(), repoNameInImage, strings.TrimPrefix(descriptionSVG, "\n\t\t"),
+		width, height+1, width, height+1, width, height, repository.GetHTMLURL(), repoNameInImage, strings.TrimPrefix(descriptionSVG, "\n\t\t"),
 		descriptionY+21, color, descriptionY+26, repository.GetLanguage(),
 		languageNextX, descriptionY+13, languageNextX+20, descriptionY+26, stars,
 		languageNextX+40+len(stars)*5, descriptionY+13, languageNextX+60+len(stars)*5, descriptionY+26, forks,

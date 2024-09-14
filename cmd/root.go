@@ -14,8 +14,9 @@ import (
 )
 
 type Flag struct {
-	repo   string
-	output string
+	repo     string
+	output   string
+	fullName bool
 }
 
 var flag Flag
@@ -30,6 +31,7 @@ func rootCmd() *cobra.Command {
 	cmd.CompletionOptions.DisableDefaultCmd = true
 	cmd.Flags().StringVarP(&flag.repo, "repo", "", "", "GitHub repository name (<owner>/<repo>)")
 	cmd.Flags().StringVarP(&flag.output, "output", "o", "", "Output file path (default: <owner>-<repo>.svg)")
+	cmd.Flags().BoolVarP(&flag.fullName, "full-name", "f", false, "Use full name in the card")
 	cmd.MarkFlagRequired("repo") /* #nosec G104 */
 	return cmd
 }
@@ -70,7 +72,7 @@ func run(cmd *cobra.Command, args []string) error {
 	}
 
 	// Generate a SVG from the repository information.
-	svg := card.GenerateSVG(repository, nCommits, card.Option{})
+	svg := card.GenerateSVG(repository, nCommits, card.Option{UsesFullName: flag.fullName})
 
 	// Write the SVG to the output file.
 	outFile := flag.output
