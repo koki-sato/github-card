@@ -72,7 +72,10 @@ func run(cmd *cobra.Command, args []string) error {
 	}
 
 	// Generate a SVG from the repository information.
-	svg := card.GenerateSVG(repository, nCommits, card.Option{UsesFullName: flag.fullName})
+	svg, err := card.GenerateSVG(repository, nCommits, card.Option{UsesFullName: flag.fullName})
+	if err != nil {
+		return err
+	}
 
 	// Write the SVG to the output file.
 	outFile := flag.output
