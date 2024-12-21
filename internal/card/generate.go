@@ -14,13 +14,19 @@ import (
 var svgTemplate string
 
 type Option struct {
-	UsesFullName bool
+	UsesFullName   bool
+	DisplayCommits bool
 }
 
 func GenerateSVG(repository *github.Repository, nCommits int, option Option) (string, error) {
 	repoNameInImage := repository.GetName()
 	if option.UsesFullName {
 		repoNameInImage = fmt.Sprintf("%s/%s", repository.GetOwner().GetLogin(), repository.GetName())
+	}
+
+	commits := ""
+	if option.DisplayCommits {
+		commits = humanize.Comma(int64(nCommits))
 	}
 
 	color := LanguageToColor[repository.GetLanguage()]
@@ -38,7 +44,7 @@ func GenerateSVG(repository *github.Repository, nCommits int, option Option) (st
 		Language:    repository.GetLanguage(),
 		Stars:       formatCount(repository.GetStargazersCount()),
 		Forks:       formatCount(repository.GetForksCount()),
-		Commits:     humanize.Comma(int64(nCommits)),
+		Commits:     commits,
 	}
 
 	funcMap := template.FuncMap{

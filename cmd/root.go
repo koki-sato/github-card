@@ -17,6 +17,7 @@ type Flag struct {
 	repo     string
 	output   string
 	fullName bool
+	commit   bool
 }
 
 var flag Flag
@@ -32,6 +33,7 @@ func rootCmd() *cobra.Command {
 	cmd.Flags().StringVarP(&flag.repo, "repo", "", "", "GitHub repository name (<owner>/<repo>)")
 	cmd.Flags().StringVarP(&flag.output, "output", "o", "", "Output file path (default: <owner>-<repo>.svg)")
 	cmd.Flags().BoolVarP(&flag.fullName, "full-name", "f", false, "Use full name in the card")
+	cmd.Flags().BoolVarP(&flag.commit, "commit", "c", false, "Show the number of commits")
 	cmd.MarkFlagRequired("repo") /* #nosec G104 */
 	return cmd
 }
@@ -57,22 +59,25 @@ func run(cmd *cobra.Command, args []string) error {
 
 	// Get the number of commits.
 	// See https://stackoverflow.com/questions/27931139/how-to-use-github-v3-api-to-get-commit-count-for-a-repo/70610670#70610670
-	_, resp, err := client.Repositories.ListCommits(ctx, owner, repo, &github.CommitsListOptions{ListOptions: github.ListOptions{PerPage: 1, Page: 1}})
-	if err != nil {
-		return err
-	}
-	re := regexp.MustCompile(`<https://api.github.com/repositories/\d+/commits\?page=(\d+)&per_page=\d+>; rel="last"`)
-	matches := re.FindStringSubmatch(resp.Header["Link"][0])
-	if len(matches) != 2 {
-		return fmt.Errorf("unable to find the number of commits")
-	}
-	nCommits, err := strconv.Atoi(matches[1])
-	if err != nil {
-		return err
+	nCommits := 0
+	if flag.commit {
+		_, resp, err := client.Repositories.ListCommits(ctx, owner, repo, &github.CommitsListOptions{ListOptions: github.ListOptions{PerPage: 1, Page: 1}})
+		if err != nil {
+			return err
+		}
+		re := regexp.MustCompile(`<https://api.github.com/repositories/\d+/commits\?page=(\d+)&per_page=\d+>; rel="last"`)
+		matches := re.FindStringSubmatch(resp.Header["Link"][0])
+		if len(matches) != 2 {
+			return fmt.Errorf("unable to find the number of commits")
+		}
+		nCommits, err = strconv.Atoi(matches[1])
+		if err != nil {
+			return err
+		}
 	}
 
 	// Generate a SVG from the repository information.
-	svg, err := card.GenerateSVG(repository, nCommits, card.Option{UsesFullName: flag.fullName})
+	svg, err := card.GenerateSVG(repository, nCommits, card.Option{UsesFullName: flag.fullName, DisplayCommits: flag.commit})
 	if err != nil {
 		return err
 	}
