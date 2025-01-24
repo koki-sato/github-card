@@ -7,20 +7,24 @@ import (
 	"strings"
 )
 
+const (
+	maxDescriptionLineLength = 60
+)
+
 func wrapDescription(description string) []string {
 	splitter := " "
 	words := strings.Split(description, splitter)
 	line := ""
 	lines := []string{}
 	for _, word := range words {
-		line += word + splitter
-		if len(line) > 55 {
-			lines = append(lines, line)
+		if len(line+word) > maxDescriptionLineLength {
+			lines = append(lines, strings.TrimSpace(line))
 			line = ""
 		}
+		line += word + splitter
 	}
 	if line != "" {
-		lines = append(lines, line)
+		lines = append(lines, strings.TrimSpace(line))
 	}
 	return lines
 }

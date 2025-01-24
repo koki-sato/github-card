@@ -10,14 +10,22 @@ func TestWrapDescription(t *testing.T) {
 		expected []string
 	}{
 		{
-			input:    "This is a short description",
-			expected: []string{"This is a short description "},
+			input:    "This is a short description.",
+			expected: []string{"This is a short description."},
 		},
 		{
-			input: "This is a long description that is longer than 55 characters and should be wrapped",
+			input: "This is a long description that is longer than 60 characters and should be wrapped.",
 			expected: []string{
-				"This is a long description that is longer than 55 characters ",
-				"and should be wrapped ",
+				"This is a long description that is longer than 60 characters",
+				"and should be wrapped.",
+			},
+		},
+		{
+			input: "This is a very long description that is longer than 60 characters and should be wrapped multiple times to demonstrate how the function works.",
+			expected: []string{
+				"This is a very long description that is longer than 60",
+				"characters and should be wrapped multiple times to",
+				"demonstrate how the function works.",
 			},
 		},
 	}
