@@ -1,13 +1,5 @@
 .DEFAULT_GOAL := help
 
-.PHONY: setup
-setup: ## Resolve dependencies with `go mod` and install tools.
-	go mod download
-	go install golang.org/x/tools/cmd/goimports@latest
-	go install honnef.co/go/tools/cmd/staticcheck@latest
-	go install github.com/securego/gosec/v2/cmd/gosec@latest
-	go install github.com/polyfloyd/go-errorlint@latest
-
 .PHONY: build
 build: ## Build application.
 	go build -trimpath -ldflags "-w -s" -o bin/
@@ -22,22 +14,22 @@ test: ## Test all packages.
 
 .PHONY: fmt
 fmt: ## Format all Go source codes.
-	goimports -w .
+	go tool goimports -w .
 
 .PHONY: lint
 lint: ## Run all linters.
 	go vet ./...
-	staticcheck ./...
-	go-errorlint -errorf=true ./...
-	gosec -quiet ./...
+	go tool staticcheck ./...
+	go tool go-errorlint -errorf=true ./...
+	go tool gosec -quiet ./...
 
 .PHONY: fix
 fix: ## Fix all linter errors.
-	go-errorlint -errorf=true -fix ./...
+	go tool go-errorlint -errorf=true -fix ./...
 
 .PHONY: codegen
 codegen: ## Generate code.
-	go run ./tools/generate-github-colors/...
+	go tool generate-github-colors
 	$(MAKE) fmt
 
 .PHONY: help

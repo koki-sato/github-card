@@ -18,9 +18,6 @@ jobs:
           cache: true
           cache-dependency-path: go.sum
 
-      - name: Install dependencies
-        run: make setup
-
       - name: Run build
         run: make build
 
