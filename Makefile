@@ -14,18 +14,19 @@ test: ## Test all packages.
 
 .PHONY: fmt
 fmt: ## Format all Go source codes.
-	go tool goimports -w .
+	go fmt ./...
 
 .PHONY: lint
-lint: ## Run all linters.
-	go vet ./...
-	go tool staticcheck ./...
-	go tool go-errorlint -errorf=true ./...
-	go tool gosec -quiet ./...
+lint: ## Run golangci-lint
+	go tool golangci-lint run
 
-.PHONY: fix
-fix: ## Fix all linter errors.
-	go tool go-errorlint -errorf=true -fix ./...
+.PHONY: lint-fix
+lint-fix: ## Run golangci-lint and perform fixes
+	go tool golangci-lint run --fix
+
+.PHONY: lint-config
+lint-config: ## Verify golangci-lint configuration
+	go tool golangci-lint config verify
 
 .PHONY: codegen
 codegen: ## Generate code.

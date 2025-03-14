@@ -27,7 +27,7 @@ func main() {
 		log.Fatalf("unmarshal: %v", err)
 	}
 
-	var languages []string
+	languages := make([]string, 0, len(values))
 	languageToColor := make(map[string]string)
 	for language, value := range values {
 		valueMap, ok := value.(map[string]interface{})

@@ -34,11 +34,11 @@ func rootCmd() *cobra.Command {
 	cmd.Flags().StringVarP(&flag.output, "output", "o", "", "Output file path (default: <owner>-<repo>.svg)")
 	cmd.Flags().BoolVarP(&flag.fullName, "full-name", "f", false, "Use full name in the card")
 	cmd.Flags().BoolVarP(&flag.commit, "commit", "c", false, "Show the number of commits")
-	cmd.MarkFlagRequired("repo") /* #nosec G104 */
+	cmd.MarkFlagRequired("repo") // nolint:errcheck
 	return cmd
 }
 
-func run(cmd *cobra.Command, args []string) error {
+func run(cmd *cobra.Command, _ []string) error {
 	ctx := cmd.Context()
 
 	if len(strings.Split(flag.repo, "/")) != 2 {
