@@ -18,8 +18,11 @@ func wrapDescription(description string) []string {
 	lines := []string{}
 	for _, word := range words {
 		if len(line+word) > maxDescriptionLineLength {
-			lines = append(lines, strings.TrimSpace(line))
-			line = ""
+			line = strings.TrimSpace(line)
+			if line != "" {
+				lines = append(lines, line)
+				line = ""
+			}
 		}
 		line += word + splitter
 	}

@@ -1,6 +1,7 @@
 package card
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -28,11 +29,20 @@ func TestWrapDescription(t *testing.T) {
 				"demonstrate how the function works.",
 			},
 		},
+		{
+			input:    strings.Repeat("a", 61),
+			expected: []string{strings.Repeat("a", 61)},
+		},
+		{
+			input:    "a " + strings.Repeat("a", 61) + " a",
+			expected: []string{"a", strings.Repeat("a", 61), "a"},
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.input, func(t *testing.T) {
 			actual := wrapDescription(test.input)
 			if len(actual) != len(test.expected) {
+				t.Error(actual)
 				t.Fatalf("expected %d lines, actual %d lines", len(test.expected), len(actual))
 			}
 			for i := range actual {
