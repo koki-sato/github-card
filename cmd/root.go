@@ -20,14 +20,18 @@ type Flag struct {
 	commit   bool
 }
 
-var flag Flag
+var (
+	flag    Flag
+	Version string
+)
 
 // rootCmd represents the base command when called without any subcommands
 func rootCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "github-card --repo <owner>/<repo>",
-		Short: "GitHub Repository Card Generator",
-		RunE:  run,
+		Use:     "github-card --repo <owner>/<repo>",
+		Short:   "GitHub Repository Card Generator",
+		Version: Version,
+		RunE:    run,
 	}
 	cmd.CompletionOptions.DisableDefaultCmd = true
 	cmd.Flags().StringVarP(&flag.repo, "repo", "", "", "GitHub repository name (<owner>/<repo>)")

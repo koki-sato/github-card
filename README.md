@@ -22,4 +22,5 @@ Flags:
   -h, --help            help for github-card
   -o, --output string   Output file path (default: <owner>-<repo>.svg)
       --repo string     GitHub repository name (<owner>/<repo>)
+  -v, --version         version for github-card
 ```
