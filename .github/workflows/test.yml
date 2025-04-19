@@ -31,4 +31,4 @@ jobs:
         run: make fmt && git diff --exit-code
 
       - name: Check character code and newline code
-        run: git ls-files | xargs -n 10 nkf --guess | ( ! grep -e Shift_JIS -e CRLF -e BOM )
+        run: git ls-files | xargs -n 10 nkf --guess | (! grep -e Shift_JIS -e CRLF -e BOM)

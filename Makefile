@@ -14,7 +14,7 @@ test: ## Test all packages.
 
 .PHONY: fmt
 fmt: ## Format all Go source codes.
-	go fmt ./...
+	go tool golangci-lint fmt
 
 .PHONY: lint
 lint: ## Run golangci-lint

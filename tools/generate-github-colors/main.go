@@ -19,9 +19,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("unable to get GitHub languages: %v", err)
 	}
-	defer resp.Body.Close()
+	defer resp.Body.Close() //nolint:errcheck
 
-	var values map[string]interface{}
+	var values map[string]any
 	err = yaml.NewDecoder(resp.Body).Decode(&values)
 	if err != nil {
 		log.Fatalf("unmarshal: %v", err)
@@ -30,7 +30,7 @@ func main() {
 	languages := make([]string, 0, len(values))
 	languageToColor := make(map[string]string)
 	for language, value := range values {
-		valueMap, ok := value.(map[string]interface{})
+		valueMap, ok := value.(map[string]any)
 		if !ok {
 			continue
 		}
@@ -40,7 +40,7 @@ func main() {
 			if !exists {
 				continue
 			}
-			groupValue, exists := values[group].(map[interface{}]interface{})
+			groupValue, exists := values[group].(map[any]any)
 			if !exists {
 				continue
 			}
