@@ -15,10 +15,16 @@ test: ## Test all packages.
 .PHONY: fmt
 fmt: ## Format all Go source codes.
 	go tool golangci-lint fmt
+	# TODO: Use the following command when the issue is fixed. https://github.com/golang/go/issues/73279
+	# go tool modernize -fix -test ./...
+	go run golang.org/x/tools/gopls/internal/analysis/modernize/cmd/modernize@latest -fix -test ./...
 
 .PHONY: lint
-lint: ## Run golangci-lint
+lint: ## Lint all Go source codes.
 	go tool golangci-lint run
+	# TODO: Use the following command when the issue is fixed. https://github.com/golang/go/issues/73279
+	# go tool modernize -test ./...
+	go run golang.org/x/tools/gopls/internal/analysis/modernize/cmd/modernize@latest -test ./...
 
 .PHONY: lint-fix
 lint-fix: ## Run golangci-lint and perform fixes
