@@ -30,5 +30,8 @@ jobs:
       - name: Check format
         run: make fmt && git diff --exit-code
 
+      - name: Check YAML file extension
+        run: git ls-files "*.yml" | (! grep .) || (echo "Use .yaml instead of .yml" && exit 1)
+
       - name: Check character code and newline code
         run: git ls-files | xargs -n 10 nkf --guess | (! grep -e Shift_JIS -e CRLF -e BOM)
