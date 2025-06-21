@@ -70,7 +70,7 @@ func main() {
 		log.Fatalf("unable to get current working directory: %v", err)
 	}
 	outFile := filepath.Join(cwd, "internal/card/language.go")
-	if err = os.WriteFile(outFile, []byte(code), 0644); err != nil /* #nosec G306 */ {
+	if err = os.WriteFile(outFile, []byte(code), 0o644); err != nil /* #nosec G306 */ {
 		log.Fatalf("unable to write file: %v", err)
 	}
 	fmt.Printf("code has been successfully written to %s\n", outFile)

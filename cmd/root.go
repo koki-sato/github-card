@@ -9,8 +9,9 @@ import (
 	"strings"
 
 	"github.com/google/go-github/v64/github"
-	"github.com/koki-sato/github-card/internal/card"
 	"github.com/spf13/cobra"
+
+	"github.com/koki-sato/github-card/internal/card"
 )
 
 type Flag struct {
@@ -65,11 +66,15 @@ func run(cmd *cobra.Command, _ []string) error {
 	// See https://stackoverflow.com/questions/27931139/how-to-use-github-v3-api-to-get-commit-count-for-a-repo/70610670#70610670
 	nCommits := 0
 	if flag.commit {
-		_, resp, err := client.Repositories.ListCommits(ctx, owner, repo, &github.CommitsListOptions{ListOptions: github.ListOptions{PerPage: 1, Page: 1}})
+		_, resp, err := client.Repositories.ListCommits(ctx, owner, repo,
+			&github.CommitsListOptions{ListOptions: github.ListOptions{PerPage: 1, Page: 1}},
+		)
 		if err != nil {
 			return err
 		}
-		re := regexp.MustCompile(`<https://api.github.com/repositories/\d+/commits\?page=(\d+)&per_page=\d+>; rel="last"`)
+		re := regexp.MustCompile(
+			`<https://api.github.com/repositories/\d+/commits\?page=(\d+)&per_page=\d+>; rel="last"`,
+		)
 		matches := re.FindStringSubmatch(resp.Header["Link"][0])
 		if len(matches) != 2 {
 			return fmt.Errorf("unable to find the number of commits")
@@ -81,7 +86,9 @@ func run(cmd *cobra.Command, _ []string) error {
 	}
 
 	// Generate a SVG from the repository information.
-	svg, err := card.GenerateSVG(repository, nCommits, card.Option{UsesFullName: flag.fullName, DisplayCommits: flag.commit})
+	svg, err := card.GenerateSVG(repository, nCommits,
+		card.Option{UsesFullName: flag.fullName, DisplayCommits: flag.commit},
+	)
 	if err != nil {
 		return err
 	}
@@ -91,7 +98,7 @@ func run(cmd *cobra.Command, _ []string) error {
 	if outFile == "" {
 		outFile = fmt.Sprintf("%s-%s.svg", owner, repo)
 	}
-	if err = os.WriteFile(outFile, []byte(svg), 0644); err != nil /* #nosec G306 */ {
+	if err = os.WriteFile(outFile, []byte(svg), 0o644); err != nil /* #nosec G306 */ {
 		log.Fatalf("unable to write file: %v", err)
 	}
 
