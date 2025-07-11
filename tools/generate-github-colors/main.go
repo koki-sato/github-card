@@ -11,11 +11,12 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+const githubLanguagesURL = "https://raw.githubusercontent.com/github/linguist/main/lib/linguist/languages.yml"
+
 func main() {
 	// Get GitHub languages information.
-	url := "https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml"
-	fmt.Printf("getting GitHub languages from %s\n", url)
-	resp, err := http.Get(url)
+	fmt.Printf("getting GitHub languages from %s\n", githubLanguagesURL)
+	resp, err := http.Get(githubLanguagesURL)
 	if err != nil {
 		log.Fatalf("unable to get GitHub languages: %v", err)
 	}
