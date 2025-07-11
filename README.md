@@ -7,6 +7,8 @@ GitHub Repository Card Generator :octocat:
 
 [![image](./image/github-card.svg)](https://github.com/koki-sato/github-card)
 
+The card design is heavily inspired by [gh-card](https://github.com/nwtgck/gh-card).
+
 ## Usage
 
 ```bash

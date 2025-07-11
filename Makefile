@@ -2,11 +2,7 @@
 
 .PHONY: build
 build: ## Build application.
-	go build -trimpath -ldflags "-w -s" -o bin/
-
-.PHONY: start
-start: ## Start application.
-	go run ./...
+	go build -trimpath -ldflags "-s -w -X main.version=0.0.0" -o bin/
 
 .PHONY: test
 test: ## Test all packages.
