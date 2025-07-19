@@ -9,6 +9,28 @@ GitHub Repository Card Generator :octocat:
 
 The card design is heavily inspired by [gh-card](https://github.com/nwtgck/gh-card).
 
+## Installation
+
+### mise
+
+You can install github-card using [mise](https://mise.jdx.dev/).
+
+```bash
+mise install ubi:koki-sato/github-card@latest
+```
+
+### GitHub Releases
+
+You can download a binary from [GitHub Releases](https://github.com/koki-sato/github-card/releases).
+
+### Install from Source Code
+
+You can build and install github-card from source code via `go install`.
+
+```bash
+go install github.com/koki-sato/github-card@latest
+```
+
 ## Usage
 
 ```bash
