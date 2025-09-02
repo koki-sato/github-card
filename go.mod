@@ -4,14 +4,14 @@ go 1.24.2
 
 tool (
 	github.com/golangci/golangci-lint/v2/cmd/golangci-lint
-	golang.org/x/tools/gopls/internal/analysis/modernize/cmd/modernize
 	github.com/koki-sato/github-card/tools/generate-github-colors
+	golang.org/x/tools/gopls/internal/analysis/modernize/cmd/modernize
 )
 
 require (
 	github.com/dustin/go-humanize v1.0.1
 	github.com/google/go-github/v64 v64.0.0
-	github.com/spf13/cobra v1.9.1
+	github.com/spf13/cobra v1.10.1
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -172,7 +172,7 @@ require (
 	github.com/spf13/afero v1.14.0 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
-	github.com/spf13/pflag v1.0.6 // indirect
+	github.com/spf13/pflag v1.0.9 // indirect
 	github.com/spf13/viper v1.12.0 // indirect
 	github.com/ssgreg/nlreturn/v2 v2.2.1 // indirect
 	github.com/stbenjam/no-sprintf-host-port v0.2.0 // indirect
